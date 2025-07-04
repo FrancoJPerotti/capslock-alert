@@ -1,0 +1,14 @@
+[Unit]
+Description=Show a persistent notification while Caps Lock is enabled
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/capslock-alert.sh
+Restart=on-failure
+RestartSec=1
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=%t/bus
+Environment=DISPLAY=%d
+
+[Install]
+WantedBy=default.target
