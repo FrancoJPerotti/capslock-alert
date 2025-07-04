@@ -65,8 +65,3 @@ To remove it later:
   cat ~/.local/state/capslock-alert.log
   ```
 
----
-
-## 📄 License
-
-MIT – free to use and modify.
