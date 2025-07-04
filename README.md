@@ -1,44 +1,44 @@
-# Capslock‑Alert
+# Capslock Alert
 
-Tiny user‑level daemon that pops up a persistent desktop notification whenever **Caps Lock** is on. Perfect for laptops without a CapsLock LED — and for anyone who keeps "SHOUTING" by accident.
+A tiny script that shows a persistent desktop notification when **Caps Lock** is enabled.
 
-![demo gif](docs/demo.gif)
-
----
-
-## Features
-
-* **Lightweight** – pure Bash + `evtest`, no polling loops
-* **Zero root** – runs as a per‑user `systemd` service
-* **Desktop‑agnostic** – works with Dunst, GNOME, KDE, swaync, etc.
-* **Auto‑recovers** after suspend or keyboard re‑plug
-* **Logs** to `~/.local/state/capslock-alert.log` (XDG‑compliant)
-* One‑command **install** and **uninstall** scripts
+Ideal for laptops or keyboards without a Caps Lock LED.
 
 ---
 
-## Prerequisites
+## 🔧 Requirements
 
-| Component              | Arch                        | Debian / Ubuntu                   | Fedora                        |
-| ---------------------- | --------------------------- | --------------------------------- | ----------------------------- |
-| `evtest`               | `pacman -S evtest`          | `apt install evtest`              | `dnf install evtest`          |
-| `notify-send` + daemon | `pacman -S libnotify dunst` | `apt install libnotify-bin dunst` | `dnf install libnotify dunst` |
+The install script will try to install all required dependencies automatically.
 
-> Any freedesktop‑compatible notification daemon works. Replace **Dunst** with your favourite if needed.
+If you want to install them manually, here's how:
+
+**Arch Linux:**
+
+```bash
+sudo pacman -S evtest libnotify dunst
+```
+
+**Debian / Ubuntu:**
+
+```bash
+sudo apt install evtest libnotify-bin dunst
+```
 
 ---
 
-## Quick install (per‑user)
+## 🚀 Installation
+
+Clone the repo and run the install script:
 
 ```bash
 git clone https://github.com/YOURNAME/capslock-alert.git
 cd capslock-alert
-./install.sh    # copies files and enables the service
+./install.sh
 ```
 
-Toggle **Caps Lock** – you should see a persistent red pop‑up.
+Then toggle **Caps Lock** — you should see a red notification.
 
-### Uninstall
+To remove it later:
 
 ```bash
 ./uninstall.sh
@@ -46,48 +46,27 @@ Toggle **Caps Lock** – you should see a persistent red pop‑up.
 
 ---
 
-## Manual install (no helper scripts)
+## 🔄 What it does
 
-```bash
-# 1. Copy files
-mkdir -p ~/.local/bin ~/.config/systemd/user
-cp capslock-alert.sh      ~/.local/bin/
-cp capslock-alert.service ~/.config/systemd/user/
-
-# 2. Enable the service
-systemctl --user daemon-reload
-systemctl --user enable --now capslock-alert.service
-```
+* Watches for Caps Lock LED changes using `evtest`
+* When Caps Lock is ON, shows a red notification
+* When Caps Lock is OFF, closes the notification
+* Runs as a systemd user service
 
 ---
 
-## Customisation
+## 🛠 Troubleshooting
 
-| Want to…                                    | Edit                                                                      |
-| ------------------------------------------- | ------------------------------------------------------------------------- |
-| Use **Num Lock** or **Scroll Lock** instead | Replace `LED_CAPSL` with `LED_NUML` / `LED_SCROLL` in *capslock-alert.sh* |
-| Monitor **multiple keyboards**              | Iterate over every `/dev/input/event*` that advertises `LED_CAPSL`        |
-| Change notification text / urgency          | Tweak the `notify-send` and `dunstctl` lines                              |
-| Package for other distros                   | See `packaging/arch/PKGBUILD` for inspiration; PRs welcome!               |
+* **No notification?** Test with `notify-send "test"`
+* **Missing permissions?** Make sure your user can read `/dev/input/event*`
+* **Script crashes?** Check the log file:
 
----
-
-## Troubleshooting
-
-| Symptom                                       | Explanation / Fix                                                                                                                |
-| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| *Cannot find keyboard device*                 | Your keyboard may not create a `*-kbd` symlink. Adjust the `find` glob or point the script to `/dev/input/eventX`.               |
-| No notification appears                       | Verify your notification daemon: `notify-send test`. Then inspect logs: `journalctl --user -u capslock-alert -f`.                |
-| Permission denied opening `/dev/input/eventX` | Ensure your session grants read access (logind usually does). Otherwise add your user to the `input` group or write a udev rule. |
+  ```bash
+  cat ~/.local/state/capslock-alert.log
+  ```
 
 ---
 
-## Contributing
+## 📄 License
 
-Pull requests and issue reports are welcome! Please run `shellcheck capslock-alert.sh` before pushing.
-
----
-
-## License
-
-MIT – see [`LICENSE`](LICENSE) for details.
+MIT – free to use and modify.
