@@ -1,0 +1,11 @@
+[rule_capslock]
+    desktop-entry = "notify-send"
+    category = "capslock"
+    background = "#ff0000"
+    foreground = "#ffffff"
+    frame_color = "#ff0000"
+    timeout = 0
+    format = "<span size="300%">%s</span>\n%b"
+    icon_position = off
+    alignment = center
+
