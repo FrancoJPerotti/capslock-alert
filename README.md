@@ -15,13 +15,13 @@ If you want to install them manually, here's how:
 **Arch Linux:**
 
 ```bash
-sudo pacman -S evtest libnotify dunst
+sudo pacman -S evtest libnotify dunst python-evdev
 ```
 
 **Debian / Ubuntu:**
 
 ```bash
-sudo apt install evtest libnotify-bin dunst
+sudo apt install evtest libnotify-bin dunst python3-evdev
 ```
 
 ---
@@ -36,6 +36,8 @@ cd capslock-alert
 ./install.sh
 ```
 
+The installation script will set up the necessary files and automatically enable the systemd user service for Caps Lock notifications.
+
 Then toggle **Caps Lock** — you should see a red notification.
 
 To remove it later:
@@ -44,6 +46,8 @@ To remove it later:
 ./uninstall.sh
 ```
 
+This script will disable the systemd service and remove all installed files.
+
 ---
 
 ## 🔄 What it does
@@ -51,6 +55,8 @@ To remove it later:
 * Watches for Caps Lock LED changes using `evtest`
 * When Caps Lock is ON, shows a red notification
 * When Caps Lock is OFF, closes the notification
+* Rescans devices periodically to handle hotplugged keyboards
+* Maintains a log file for events at `~/.local/state/capslock-alert.log`
 * Runs as a systemd user service
 
 ---
@@ -64,4 +70,6 @@ To remove it later:
   ```bash
   cat ~/.local/state/capslock-alert.log
   ```
+
+* **Notification not appearing?** Ensure Dunst is running. If Dunst isn't reloading automatically, restart it manually.
 
